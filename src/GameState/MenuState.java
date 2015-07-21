@@ -1,7 +1,9 @@
 package GameState;
 
+import Main.GamePanel;
 import TileMap.Background;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -9,6 +11,8 @@ public class MenuState extends GameState {
 
     private Background bg;
 
+    private String titleName = "Airasa";
+    private JLabel label;
     private int currentChoice = 0;
     private String[] options = {
             "Start",
@@ -28,7 +32,7 @@ public class MenuState extends GameState {
         try {
 
             bg = new Background("/Backgrounds/menubg.gif", 1);
-            bg.setVector(-0.1, 0);
+            bg.setVector(-0.5, 0);
 
             titleColor = new Color(128, 0, 0);
             titleFont = new Font(
@@ -59,7 +63,10 @@ public class MenuState extends GameState {
         // draw title
         g.setColor(titleColor);
         g.setFont(titleFont);
-        g.drawString("Airasa", 80, 70);
+        FontMetrics fm = g.getFontMetrics();
+        int stringWidth = (fm.stringWidth(titleName));
+        System.out.println(stringWidth);
+        g.drawString(titleName, (GamePanel.WIDTH) - stringWidth / 2, 70);
 
         // draw menu options
         g.setFont(font);
