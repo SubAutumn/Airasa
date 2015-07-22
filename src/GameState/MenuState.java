@@ -6,13 +6,13 @@ import TileMap.Background;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Rectangle2D;
 
 public class MenuState extends GameState {
 
     private Background bg;
 
-    private String titleName = "Airasa";
-    private JLabel label;
+    private String titleName = "AIRASA";
     private int currentChoice = 0;
     private String[] options = {
             "Start",
@@ -36,17 +36,16 @@ public class MenuState extends GameState {
 
             titleColor = new Color(128, 0, 0);
             titleFont = new Font(
-                    "Century Gothic",
+                    "Narkisim",
                     Font.PLAIN,
-                    28);
+                    52);
 
-            font = new Font("Arial", Font.PLAIN, 12);
+            font = new Font("Arial", Font.PLAIN, 13);
 
         }
         catch(Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public void init() {}
@@ -64,9 +63,11 @@ public class MenuState extends GameState {
         g.setColor(titleColor);
         g.setFont(titleFont);
         FontMetrics fm = g.getFontMetrics();
-        int stringWidth = (fm.stringWidth(titleName));
-        System.out.println(stringWidth);
-        g.drawString(titleName, (GamePanel.WIDTH) - stringWidth / 2, 70);
+        Rectangle2D r = fm.getStringBounds(titleName, g);
+        int x = ((GamePanel.WIDTH) - (int) r.getWidth()) / 2;
+        int y = ((GamePanel.HEIGHT) - (int) r.getHeight()) / 2 + fm.getAscent() / 2 - 30;
+        g.drawString(titleName, x, y);
+        //g.drawString(titleName, (GamePanel.WIDTH) - stringWidth / 2, 70);
 
         // draw menu options
         g.setFont(font);
@@ -79,7 +80,6 @@ public class MenuState extends GameState {
             }
             g.drawString(options[i], 145, 140 + i * 15);
         }
-
     }
 
     private void select() {
