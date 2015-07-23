@@ -122,6 +122,8 @@ public class TileMap {
     public double gety() { return y; }
     public int getWidth() { return width; }
     public int getHeight() { return height; }
+    public int getNumRows() { return numRows; }
+    public int getNumCols() { return numCols; }
 
     public int getType(int row, int col) {
         int rc = map[row][col];
