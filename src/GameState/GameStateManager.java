@@ -1,46 +1,61 @@
 package GameState;
 
+import Audio.JukeBox;
+import Main.GamePanel;
+
 import java.util.ArrayList;
 import java.awt.*;
 
 public class GameStateManager {
 
-    private ArrayList<GameState> gameStates;
+    private GameState[] gameStates;
     private int currentState;
 
+    public static final int NUMGAMESTATES = 16;
     public static final int MENUSTATE = 0;
     public static final int LEVEL1STATE = 1;
 
     public GameStateManager() {
 
-        gameStates = new ArrayList<GameState>();
+        JukeBox.init();
+
+        gameStates = new GameState[NUMGAMESTATES];
 
         currentState = MENUSTATE;
-        gameStates.add(new MenuState(this));
+        loadState(currentState);
 
+    }
+
+    private void loadState(int state) {
+        if(state == MENUSTATE)
+            gameStates[state] = new MenuState(this);
+        else if(state == LEVEL1STATE)
+            gameStates[state] = new Level1State(this);
+    }
+
+    private void unloadState(int state) {
+        gameStates[state] = null;
     }
 
     public void setState(int state) {
+        unloadState(currentState);
         currentState = state;
-        gameStates.get(currentState).init();
+        loadState(currentState);
     }
 
     public void update() {
-        gameStates.get(currentState).update();
+
+        if(gameStates[currentState] != null) gameStates[currentState].update();
+
     }
 
     public void draw(Graphics2D g) {
-        gameStates.get(currentState).draw(g);
+        if (gameStates[currentState] != null) gameStates[currentState].draw(g);
+        else {
+            g.setColor(java.awt.Color.BLACK);
+            g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+        }
     }
-
-    public void keyPressed(int k) {
-        gameStates.get(currentState).keyPressed(k);
-    }
-
-    public void keyReleased(int k) {
-        gameStates.get(currentState).keyReleased(k);
-    }
-
 }
 
 

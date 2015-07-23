@@ -7,6 +7,7 @@ import java.awt.event.*;
 import javax.swing.JPanel;
 
 import GameState.GameStateManager;
+import Handlers.Keyboard;
 
 public class GamePanel extends JPanel
         implements Runnable, KeyListener{
@@ -94,7 +95,10 @@ public class GamePanel extends JPanel
     }
 
     private void update() {
+
         gsm.update();
+        Keyboard.update();
+
     }
     private void draw() {
         gsm.draw(g);
@@ -109,10 +113,14 @@ public class GamePanel extends JPanel
 
     public void keyTyped(KeyEvent key) {}
     public void keyPressed(KeyEvent key) {
-        gsm.keyPressed(key.getKeyCode());
+
+        Keyboard.keySet(key.getKeyCode(), true);
+
     }
     public void keyReleased(KeyEvent key) {
-        gsm.keyReleased(key.getKeyCode());
+
+        Keyboard.keySet(key.getKeyCode(), false);
+
     }
 
 }
