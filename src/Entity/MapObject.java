@@ -40,7 +40,7 @@ public abstract class MapObject {
     protected boolean bottomRight;
 
     //animation
-    protected Animation animation;
+   // protected Animation animation;
     protected int currentAction;
     protected int previousAction;
     protected int facingRight;
@@ -92,6 +92,12 @@ public abstract class MapObject {
         int rightTile = (int)(x + cwidth / 2 - 1) / tileSize;
         int topTile = (int)(y - cheight / 2) / tileSize;
         int bottomTile = (int)(y + cheight / 2 - 1) / tileSize;
+
+        if(topTile < 0 || bottomTile >= tileMap.getNumRows() ||
+                leftTile < 0 || rightTile >= tileMap.getNumCols()) {
+            topLeft = topRight = bottomLeft = bottomRight = false;
+            return;
+        }
 
         int tl = tileMap.getType(topTile, leftTile);
         int tr = tileMap.getType(topTile, rightTile);
