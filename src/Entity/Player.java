@@ -2,7 +2,6 @@ package Entity;
 
 import TileMap.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -57,7 +56,7 @@ public class Player extends MapObject {
         width = 30;
         height = 30;
         cwidth = 20;
-        cwidth = 20;
+        cheight = 20;
 
         moveSpeed = 0.3;
         maxSpeed = 1.6;
@@ -82,7 +81,8 @@ public class Player extends MapObject {
         //load sprites
         try{
 
-            BufferedImage spriteSheet = ImageIO.read(getClass().getResourceAsStream(
+			BufferedImage spritesheet = ImageIO.read(
+				getClass().getResourceAsStream(
                     "/Sprites/Player/playersprites.gif"
                  )
             );
@@ -94,12 +94,12 @@ public class Player extends MapObject {
                         new BufferedImage[numFrames[i]];
                 for(int j = 0; j < numFrames[i]; j++){
                     if(i != 6){
-                        bi[j] = spriteSheet.getSubimage(
+						bi[j] = spritesheet.getSubimage(
                                 j * width, i * height, width, height
                         );
                     }
                     else{
-                        bi[j] = spriteSheet.getSubimage(
+						bi[j] = spritesheet.getSubimage(
                                 j * width * 2, i * height, width, height
                         );
                     }
@@ -107,17 +107,18 @@ public class Player extends MapObject {
 
                 sprites.add(bi);
 
-                animation = new Animation();
-                currentAction = IDLE;
-                animation.setFrames(sprites.get(IDLE));
-                animation.setDelay(100);
-
             }
 
         }
         catch(Exception e){
-            e.getStackTrace();
+            e.printStackTrace();
         }
+
+        animation = new Animation();
+        currentAction = IDLE;
+        animation.setFrames(sprites.get(IDLE));
+        animation.setDelay(400);
+
     }
 
     public int getHealth() {return health;}
@@ -180,11 +181,13 @@ public class Player extends MapObject {
 
         }
 
+		// jumping
         if(jumping && !falling){
             dy = jumpStart;
             falling = true;
         }
 
+		// falling
         if(falling) {
             if(dy > 0 && gliding) dy += fallSpeed * 0.1;
             else dy += fallSpeed;
@@ -227,14 +230,14 @@ public class Player extends MapObject {
                     currentAction = GLIDING;
                     animation.setFrames(sprites.get(GLIDING));
                     animation.setDelay(100);
-                    width = 100;
+                    width = 30;
                 }
             }
             else if(currentAction != FALLING) {
                 currentAction = FALLING;
                 animation.setFrames(sprites.get(FALLING));
                 animation.setDelay(100);
-                width = 100;
+				width = 30;
             }
         }
         else if(dy < 0) {
@@ -257,7 +260,7 @@ public class Player extends MapObject {
             if(currentAction != IDLE) {
                 currentAction = IDLE;
                 animation.setFrames(sprites.get(IDLE));
-                animation.setDelay(100);
+				animation.setDelay(400);
                 width = 30;
             }
         }
@@ -275,9 +278,10 @@ public class Player extends MapObject {
 
         setMapPosition();
 
-        //draw the player sprites
-        if(Flinching) {
-            long elapsed = (System.nanoTime() - flinchTime) / 1000000;
+		// draw player
+		if(Flinching) {
+			long elapsed =
+				(System.nanoTime() - flinchTime) / 1000000;
             if(elapsed / 100 % 2 == 0) {
                 return;
             }

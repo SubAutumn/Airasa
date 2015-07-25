@@ -27,6 +27,7 @@ public class Level1State extends GameState{
         tileMap.loadTiles("/Tilesets/grasstileset.gif");
         tileMap.loadMap("/Maps/level1-1.map");
         tileMap.setPosition(0, 0);
+        tileMap.setTween(1);
 
         bg = new Background("/Backgrounds/grassbg1.gif", 0.1);
 
@@ -43,6 +44,7 @@ public class Level1State extends GameState{
         );
         //tileMap.update();
         tileMap.fixBounds();
+        handleInput();
 
     }
     public void draw(Graphics2D g) {

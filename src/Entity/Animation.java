@@ -13,7 +13,7 @@ public class Animation {
     private boolean playedOnce;
 
     public void Animation() {
-
+        playedOnce = false;
     }
 
     public void setFrames(BufferedImage[] frames) {
@@ -25,7 +25,7 @@ public class Animation {
 
     }
 
-    public void setDelay(long d) { delay = delay; }
+    public void setDelay(long d) { delay = d; }
     public void setFrame(int i) { currentFrame = i; }
 
     public void update() {

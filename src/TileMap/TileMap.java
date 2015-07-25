@@ -132,6 +132,8 @@ public class TileMap {
         return tiles[r][c].getType();
     }
 
+    public void setTween(double d) { tween = d; }
+
     public void setPosition(double x, double y){
 
         this.x += (x - this.x) * tween;
