@@ -144,7 +144,7 @@ public class TileMap {
 
     }
 
-    private void fixBounds() {
+    public void fixBounds() {
         if(x < xmin) x = xmin;
         if(y < ymin) y = ymin;
         if(x > xmax) x = xmax;
