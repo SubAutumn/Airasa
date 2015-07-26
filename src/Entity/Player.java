@@ -1,5 +1,6 @@
 package Entity;
 
+import Audio.JukeBox;
 import TileMap.*;
 
 import java.util.ArrayList;
@@ -17,6 +18,9 @@ public class Player extends MapObject {
     private boolean Dead;
     private boolean Flinching;
     private long flinchTime;
+    private boolean doubleJump;
+    private boolean alreadyDoubleJump;
+    private double doubleJumpStart;
 
     //fireball
     private boolean firing;
@@ -61,8 +65,9 @@ public class Player extends MapObject {
         stopSpeed = 0.4;
         fallSpeed = 0.15;
         maxFallSpeed = 4.0;
-        jumpStart = -4.8;
+        jumpStart = -4.3;
         stopJumpSpeed = 0.3;
+        doubleJumpStart = -3;
 
         facingRight = true;
 
@@ -112,6 +117,8 @@ public class Player extends MapObject {
             e.printStackTrace();
         }
 
+        JukeBox.load("/SFX/playerjump.mp3", "playerjump");
+
         animation = new Animation();
         currentAction = IDLE;
         animation.setFrames(sprites.get(IDLE));
@@ -133,6 +140,15 @@ public class Player extends MapObject {
     public void setScratching() {
 
         scratching = true;
+
+    }
+
+    public void setJumping(boolean b) {
+
+        if(b && !jumping && falling && !alreadyDoubleJump) {
+            doubleJump = true;
+        }
+        jumping = b;
 
     }
 
@@ -183,7 +199,18 @@ public class Player extends MapObject {
         if(jumping && !falling){
             dy = jumpStart;
             falling = true;
+            JukeBox.play("playerjump");
         }
+
+        //double jump
+        if(doubleJump) {
+            dy = doubleJumpStart;
+            alreadyDoubleJump = true;
+            doubleJump = false;
+            JukeBox.play("playerjump");
+        }
+
+        if(!falling) alreadyDoubleJump = false;
 
 		// falling
         if(falling) {
