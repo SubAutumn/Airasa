@@ -4,6 +4,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import Entity.Enemies.Snail;
+import Entity.Enemy;
+import Entity.HUD;
 import Entity.Player;
 import Entity.Title;
 import Handlers.Keyboard;
@@ -17,6 +20,8 @@ public class Level1State extends GameState{
     private TileMap tileMap;
     private Background bg;
 
+    private ArrayList<Enemy> enemies;
+
     private BufferedImage hageonText;
     private Title title;
     private Title subtitle;
@@ -27,6 +32,8 @@ public class Level1State extends GameState{
     private ArrayList<Rectangle> tb;
 
     private Player player;
+
+    private HUD hud;
 
     public Level1State(GameStateManager gsm) {
 
@@ -66,6 +73,15 @@ public class Level1State extends GameState{
         tb = new ArrayList<Rectangle>();
         eventStart();
 
+        hud = new HUD(player);
+
+        //Enemies
+        enemies = new ArrayList<Enemy>();
+        Snail s;
+        s = new Snail(tileMap);
+        s.setPosition(100, 100);
+        enemies.add(s);
+
     }
     public void update() {
 
@@ -77,6 +93,9 @@ public class Level1State extends GameState{
                 GamePanel.WIDTH / 2 - player.getX(),
                 GamePanel.HEIGHT / 2 - player.getY()
         );
+
+        //set the background to move
+        bg.setPosition(tileMap.getx(), tileMap.gety());
         //tileMap.update();
         tileMap.fixBounds();
         handleInput();
@@ -89,6 +108,11 @@ public class Level1State extends GameState{
         if(subtitle != null) {
             subtitle.update();
             if(subtitle.shouldRemove()) subtitle = null;
+        }
+
+        //update all enemies
+        for(int i = 0; i < enemies.size(); i++){
+            enemies.get(i).update();
         }
 
     }
@@ -105,6 +129,13 @@ public class Level1State extends GameState{
         //draw title/subtitle
         if(title != null) title.draw(g);
         if(subtitle != null) subtitle.draw(g);
+
+        //draw enemies
+        for(int i = 0; i < enemies.size(); i++) {
+            enemies.get(i).draw(g);
+        }
+
+        hud.draw(g);
 
     }
     public void handleInput() {

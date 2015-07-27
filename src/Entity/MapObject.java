@@ -255,6 +255,36 @@ public abstract class MapObject {
         }
     }
 
+    public void getNextPosition() {
+        //movement
+        if(left){
+            dx -= moveSpeed;
+            if(dx < -maxSpeed) {
+                dx = -maxSpeed;
+            }
+        }
+        else if(right){
+            dx += moveSpeed;
+            if(dx > maxSpeed){
+                dx = maxSpeed;
+            }
+        }
+        else{
+            if (dx > 0){
+                dx -= stopSpeed;
+                if(dx < 0) {
+                    dx = 0;
+                }
+            }
+            else if( dx < 0 ){
+                dx += stopSpeed;
+                if(dx > 0){
+                    dx = 0;
+                }
+            }
+        }
+    }
+
 }
 
 

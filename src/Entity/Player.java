@@ -158,35 +158,9 @@ public class Player extends MapObject {
 
     }
 
-    private void getNextPosition(){
+    public void getNextPosition(){
 
-        //movement
-        if(left){
-            dx -= moveSpeed;
-            if(dx < -maxSpeed) {
-                dx = -maxSpeed;
-            }
-        }
-        else if(right){
-            dx += moveSpeed;
-            if(dx > maxSpeed){
-                dx = maxSpeed;
-            }
-        }
-        else{
-            if (dx > 0){
-                dx -= stopSpeed;
-                if(dx < 0) {
-                    dx = 0;
-                }
-            }
-            else if( dx < 0 ){
-                dx += stopSpeed;
-                if(dx > 0){
-                    dx = 0;
-                }
-            }
-        }
+        super.getNextPosition();
 
         // cannot move whilst attacking, except in air
         if((currentAction == SCRATCHING || currentAction == FIREBALL) && !(jumping || falling)) {
