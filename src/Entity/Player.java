@@ -26,7 +26,7 @@ public class Player extends MapObject {
     private boolean firing;
     private int fireCost;
     private int fireBallDamage;
-    //private ArrayList<FireBall> fireBalls;
+    private ArrayList<FireBall> fireBalls;
 
     //scratch
     private boolean scratching;
@@ -76,7 +76,7 @@ public class Player extends MapObject {
 
         fireCost = 200;
         fireBallDamage = 5;
-        //fireBalls = new ArrayList<FireBall>();
+        fireBalls = new ArrayList<FireBall>();
 
         scratchDamage = 8;
         scratchRange = 40;
@@ -96,14 +96,14 @@ public class Player extends MapObject {
                 BufferedImage[] bi =
                         new BufferedImage[numFrames[i]];
                 for(int j = 0; j < numFrames[i]; j++){
-                    if(i != 6){
+                    if(i != SCRATCHING){
 						bi[j] = spritesheet.getSubimage(
                                 j * width, i * height, width, height
                         );
                     }
                     else{
 						bi[j] = spritesheet.getSubimage(
-                                j * width * 2, i * height, width, height
+                                j * width * 2, i * height, width * 2, height
                         );
                     }
                 }
@@ -232,6 +232,34 @@ public class Player extends MapObject {
         checkTileMapCollision();
         setPosition(xtemp, ytemp);
 
+        if(currentAction == SCRATCHING){
+            if(animation.getPlayedOnce()) scratching = false;
+        }
+        if(currentAction == FIREBALL){
+            if(animation.getPlayedOnce()) firing = false;
+        }
+
+        if(scratching == true) firing = false;
+
+        //Fireball attack
+        fire += 1;
+        if (fire > maxFire) fire = maxFire;
+        if(firing && currentAction != FIREBALL) {
+            if(fire > fireCost) {
+                fire -= fireCost;
+                FireBall fb = new FireBall(tileMap, facingRight);
+                fb.setPosition(x, y);
+                fireBalls.add(fb);
+            }
+        }
+        for(int i = 0; i < fireBalls.size(); i++) {
+            fireBalls.get(i).update();
+            if(fireBalls.get(i).shouldRemove()) {
+                fireBalls.remove(i);
+                i--;
+            }
+        }
+
         // set animations
         if(scratching) {
             if(currentAction != SCRATCHING) {
@@ -303,6 +331,11 @@ public class Player extends MapObject {
 
         setMapPosition();
 
+        //draw Fireballs
+        for(int i = 0; i < fireBalls.size(); i++) {
+            fireBalls.get(i).draw(g);
+        }
+
 		// draw player
 		if(Flinching) {
 			long elapsed =
@@ -312,24 +345,8 @@ public class Player extends MapObject {
             }
         }
 
-        if(facingRight){
-            g.drawImage(
-                    animation.getImage(),
-                    (int)(x + xmap - width / 2),
-                    (int)(y + ymap - height / 2),
-                    null
-            );
-        }
-        else {
-            g.drawImage(
-                    animation.getImage(),
-                    (int)(x + xmap - width / 2 + width),
-                    (int)(y + ymap - height / 2),
-                    -width,
-                    height,
-                    null
-            );
-        }
+        isFacingRight(g);
+
     }
 }
 

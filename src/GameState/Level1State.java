@@ -51,11 +51,11 @@ public class Level1State extends GameState{
         // title and subtitle
         try {
             hageonText = ImageIO.read(
-                    getClass().getResourceAsStream("/HUD/HageonTemple.gif")
+                    getClass().getResourceAsStream("/HUD/level1title.gif")
             );
-            title = new Title(hageonText.getSubimage(0, 0, 178, 20));
+            title = new Title(hageonText.getSubimage(0, 0, 178, 25));
             title.setY(60);
-            subtitle = new Title(hageonText.getSubimage(0, 20, 82, 13));
+            subtitle = new Title(hageonText.getSubimage(0, 31, 65, 15));
             subtitle.setY(85);
         }
         catch(Exception e) {
@@ -114,6 +114,8 @@ public class Level1State extends GameState{
         player.setRight(Keyboard.keyState[Keyboard.RIGHT]);
         player.setJumping(Keyboard.keyState[Keyboard.BUTTON1]);
         player.setGliding(Keyboard.keyState[Keyboard.BUTTON2]);
+        if(Keyboard.isPressed(Keyboard.BUTTON3)) player.setScratching();
+        if(Keyboard.isPressed(Keyboard.BUTTON4)) player.setFiring();
     }
 
     private void eventStart() {
