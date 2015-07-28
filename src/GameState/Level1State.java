@@ -89,6 +89,7 @@ public class Level1State extends GameState{
 
         player.update();
 
+
         tileMap.setPosition(
                 GamePanel.WIDTH / 2 - player.getX(),
                 GamePanel.HEIGHT / 2 - player.getY()
@@ -113,6 +114,12 @@ public class Level1State extends GameState{
         //update all enemies
         for(int i = 0; i < enemies.size(); i++){
             enemies.get(i).update();
+        }
+
+        //Check if player is dead
+        if(player.getHealth() == 0 || player.getY() > tileMap.getHeight()){
+            gsm.setState(GameStateManager.MENUSTATE);
+            System.out.println("dead?");
         }
 
     }
@@ -170,11 +177,6 @@ public class Level1State extends GameState{
             eventCount = 0;
             subtitle.begin();
             tb.clear();
-        }
-
-        if(player.getHealth() == 0 || player.getY() > tileMap.getHeight()){
-            gsm.setState(GameStateManager.MENUSTATE);
-            System.out.println("dead?");
         }
     }
 }
